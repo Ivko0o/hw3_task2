@@ -4,7 +4,7 @@
 
 using namespace std;
 
-
+char toLower(char ch);
 void Table(char*& letters, string*& words, int& cryptation_Pairs);
 void TextEncryption(char* letters, string* words, int cryptation_Pairs);
 
@@ -29,12 +29,14 @@ void TextEncryption(char* letters, string* words, int cryptation_Pairs) {
 	getline(cin, user_Text);
 
 	for (char ch : user_Text){
+
 		bool found = false;
+		char lower_ch = toLower(ch);
 
 		for (int i = 0; i < cryptation_Pairs; i++) {
 	
 
-			if (ch == letters[i]) {
+			if (lower_ch == letters[i]) {
 				cout << words[i];
 				found = true;
 				break;
@@ -62,15 +64,36 @@ void Table(char*& letters, string*& words, int& cryptation_Pairs) {
 
 	cout << "Enter cryptation pairs (e.g. a ala): " << endl;
 	for (int i = 0; i < cryptation_Pairs; i++) {
-		string text;
-		getline(cin, text);
+		while (true) {
+			string text;
+			getline(cin, text);
 
-		letters[i] = text[0];
+			if (text.length() < 3 || text[1] != ' ') {
+				cout << "Error: Input must be in the format 'a ala'. Try again:";
+				continue;
+			}
 
-		words[i] = text.substr(2);
+			letters[i] = toLower(text[0]);
+			string word = text.substr(2);
+
+			if (word.length() < 1 || word.length() > 10) {
+				cout << "Error: The word must be between 1 and 10 characters. Try again: " << endl;
+				continue;
+			}
+
+			words[i] = word;
+			break;
+		}
 	}
 
 }
 
+//This is needed so the program doesn`t make difference between upper and lower case letters
+char toLower(char ch) {
+	if (ch >= 'A' && ch <= 'Z') {
+		return ch + ('a' - 'A');  
+	}
+	return ch;
+}
 
 
